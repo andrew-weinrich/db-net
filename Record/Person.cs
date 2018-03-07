@@ -53,7 +53,7 @@ namespace Record
             { "birthdate", Comparer<Person>.Create((p1, p2) => p1.Birthdate.CompareTo(p2.Birthdate)) },
             { "name", Comparer<Person>.Create((p1, p2) => p2.LastName.CompareTo(p1.LastName)) },
             { "gender", Comparer<Person>.Create((p1, p2) => {
-                    var genderComparison = p1.Birthdate.CompareTo(p2.Birthdate);
+                    var genderComparison = p1.Gender.CompareTo(p2.Gender);
                     if (genderComparison != 0)
                         return genderComparison;
                     else
@@ -75,7 +75,7 @@ namespace Record
             if (components.Length != 5)
                 throw new Exception("String to parse did not have five components with delimiter '" + delimiter + "': " + line);
             var parsedDate = DateTime.Parse(components[4]);
-            var gender = Enum.Parse(typeof(Gender), components[2]);
+            var gender = (Gender)(Enum.Parse(typeof(Gender), components[2]));
 
             return new Person(components[0], components[1], gender, components[3], parsedDate);
         }

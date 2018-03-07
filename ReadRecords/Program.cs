@@ -10,8 +10,9 @@ namespace ReadRecords
     {
         static void Main(string[] args)
         {
-            if (args.Length != 4)
-                throw new Exception("Invalid number of parameters: should be fileName delimiter sortType");
+            if (args.Length != 3)
+                throw new Exception("Invalid number of parameters: should be fileName delimiter sortType (got '" + 
+                                    String.Join("' '", args) + "')");
 
             var records = new Dictionary<string, Person>();
 
