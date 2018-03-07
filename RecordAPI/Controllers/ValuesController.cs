@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System.Web;
 
 using Record;
 
@@ -13,7 +15,7 @@ namespace RecordAPI.Controllers
     [Route("api/records")]
     public class RecordsController : Controller
     {
-        private Dictionary<string, Person> records = new Dictionary<string, Person>();
+        private static Dictionary<string, Person> records = new Dictionary<string, Person>();
 
         // GET api/values
         [HttpGet("{sortMethod}")]
@@ -25,31 +27,33 @@ namespace RecordAPI.Controllers
             var orderedRecords = new List<Person>(records.Values);
             orderedRecords.Sort(Person.SortMethods[sortMethod]);
 
-            string output = "";
+            // for a program this simple, generate JSON text manually instead of using serializers
+            var jsonList = new List<string>();
             foreach (var person in orderedRecords)
             {
-                output += String.Format("{0} {1} {2} {3} {4:MM/dd/yyyy}",
-                                        person.LastName,
-                                        person.FirstName,
-                                        person.FavoriteColor,
-                                        person.Gender,
-                                        person.Birthdate);
+                jsonList.Add("{" +
+                             "\"firstName\":\"" + HttpUtility.JavaScriptStringEncode(person.FirstName) + "\"," +
+                             "\"lastName\":\"" + HttpUtility.JavaScriptStringEncode(person.LastName) + "\"," +
+                             "\"gender\":\"" + HttpUtility.JavaScriptStringEncode(person.Gender.ToString()) + "\"," +
+                             "\"favoriteColor\":\"" + HttpUtility.JavaScriptStringEncode(person.FavoriteColor) + "\"," +
+                             "\"birthDate\":\"" + HttpUtility.JavaScriptStringEncode(person.Birthdate.ToString("MM/dd/yyyy")) + "\"" +
+                             "}");
             }
 
-            return output;
+            return "[" + String.Join(",\n", jsonList) + "]";
         }
-
-
-
 
 
         // POST api/records
         [HttpPost]
-        public void PostRecord([FromBody]string value)
+        public void PostRecord()
         {
-            throw new Exception("Input: " + value);
-            //var person = Person.ParsePerson(value);
-            //records[person.Key] = person;
+            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                var input = reader.ReadToEnd();
+                var person = Person.ParsePerson(input);
+                records.Add(person.Key, person);
+            }
         }
     }
 }
