@@ -15,6 +15,8 @@ namespace RecordAPI.Controllers
     [Route("api/records")]
     public class RecordsController : Controller
     {
+        private static readonly int HttpErrorCode = 400;
+
         private static Dictionary<string, Person> records = new Dictionary<string, Person>();
 
         // GET api/values
@@ -22,7 +24,11 @@ namespace RecordAPI.Controllers
         public string Get(string sortMethod)
         {
             if (!Person.SortMethods.ContainsKey(sortMethod))
+            {
+                Response.StatusCode = HttpErrorCode;
+                Response.ContentType = "text/plain";
                 return "invalid sort method: " + sortMethod;
+            }
 
             var orderedRecords = new List<Person>(records.Values);
             orderedRecords.Sort(Person.SortMethods[sortMethod]);
@@ -40,6 +46,7 @@ namespace RecordAPI.Controllers
                              "}");
             }
 
+            Response.ContentType = "application/json";
             return "[" + String.Join(",\n", jsonList) + "]";
         }
 
@@ -48,11 +55,24 @@ namespace RecordAPI.Controllers
         [HttpPost]
         public void PostRecord()
         {
-            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            try
             {
-                var input = reader.ReadToEnd();
-                var person = Person.ParsePerson(input);
-                records.Add(person.Key, person);
+                using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+                {
+                    var input = reader.ReadToEnd();
+                    var person = Person.ParsePerson(input);
+                    records.Add(person.Key, person);
+                }
+            }
+            catch (Exception e)
+            {
+                using (var writer = new StreamWriter(Response.Body))
+                {
+                    Response.StatusCode = HttpErrorCode;
+                    Response.ContentType = "text/plain";
+                    var errorMessage = "Parsing error: " + e.Message;
+                    writer.Write(errorMessage);
+                }
             }
         }
     }
