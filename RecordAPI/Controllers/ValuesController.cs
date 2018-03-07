@@ -46,7 +46,6 @@ namespace RecordAPI.Controllers
                              "}");
             }
 
-            Response.ContentType = "application/json";
             return "[" + String.Join(",\n", jsonList) + "]";
         }
 
