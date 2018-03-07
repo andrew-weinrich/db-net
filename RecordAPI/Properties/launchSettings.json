@@ -16,10 +16,10 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "db_net": {
+    "RecordAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/records",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

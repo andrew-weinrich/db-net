@@ -7,16 +7,18 @@ post_data() {
     DELIMITER="$1"
     TEST_ID="$2"
     
-    #python service.py 2>&1 &
-    python service.py > /dev/null 2>&1 &
+    APPLICATION="RecordAPI/bin/Debug/netcoreapp2.0/RecordAPI.dll"
+    HOST="localhost:5000"
+    
+    dotnet $APPLICATION > /dev/null 2>&1 &
     SERVICE_PID=$!
     sleep 3
     
     while read line; do
-        curl -s -X POST -d "$line" "http://localhost:8080/records?delimiter=$DELIMITER"
+        curl -s -X POST -d "$line" "http://$HOST/records?delimiter=$DELIMITER"
     done < "input${TEST_ID}.txt"
     
-    curl -s -X GET "http://localhost:8080/records/${SORT_TYPE}" > "test_output-${TEST_ID}-${SORT_TYPE}-unsorted.txt"
+    curl -s -X GET "http://$HOST/records/${SORT_TYPE}" > "test_output-${TEST_ID}-${SORT_TYPE}-unsorted.txt"
     
     # rearrange the data into key-ordered format
     python parse_json.py < "test_output-${TEST_ID}-${SORT_TYPE}-unsorted.txt" > "test_output-${TEST_ID}-${SORT_TYPE}.txt"

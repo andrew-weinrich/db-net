@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace db_net
+namespace RecordAPI
 {
     public class Startup
     {
@@ -29,6 +29,9 @@ namespace db_net
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors(builder =>
+                builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

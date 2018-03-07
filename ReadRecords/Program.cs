@@ -10,28 +10,27 @@ namespace ReadRecords
     {
         static void Main(string[] args)
         {
-            if (args.Length != 3)
-                throw new Exception("Invalid number of parameters: should be fileName delimiter sortType (got '" + 
+            if (args.Length != 2)
+                throw new Exception("Invalid number of parameters: should be fileName sortType (got '" + 
                                     String.Join("' '", args) + "')");
 
             var records = new Dictionary<string, Person>();
 
             var fileName = args[0];
-            var delimiter = args[1];
-            var sortType = args[2];
+            var sortType = args[1];
 
             using (var reader = new System.IO.StreamReader(fileName))
             {
                 var line = "";
                 while ((line = reader.ReadLine()) != null)
                 {
-                    var person = Person.ParsePerson(line, delimiter);
+                    var person = Person.ParsePerson(line);
                     records[person.Key] = person;
                 }
             }
 
             var orderedRecords = new List<Person>(records.Values);
-            orderedRecords.Sort(Person.SortMethods[args[2]]);
+            orderedRecords.Sort(Person.SortMethods[args[1]]);
 
             foreach (var person in orderedRecords)
             {

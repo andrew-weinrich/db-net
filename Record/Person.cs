@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Record
 {
@@ -62,18 +63,22 @@ namespace Record
             }
         };
 
+        // ' | ' has to come first so that it doesn't get short-circuited by ' '
+        private static readonly string[] Delimiters = new string[] { " | ", " ", ", " };
+
         /// <summary>
-        /// Parses a string to a Person object, with a specified field delimiter. Requires fields in the format
+        /// Parses a string to a Person object. Requires fields in the format
         /// "lastName firstName gender favoriteColor birthdate"
         /// </summary>
         /// <returns>The person.</returns>
         /// <param name="line">Input line</param>
-        /// <param name="delimiter">Delimiter of fields</param>
-        public static Person ParsePerson(string line, string delimiter)
+        public static Person ParsePerson(string line)
         {
-            var components = line.Split(new string[]{ delimiter }, System.StringSplitOptions.RemoveEmptyEntries);
+            //var components = SplitFormat.Split(line);
+            var components = line.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
+
             if (components.Length != 5)
-                throw new Exception("String to parse did not have five components with delimiter '" + delimiter + "': " + line);
+                throw new Exception("String to parse had " + components.Length + " components: " + String.Join(" / ", components));
             var parsedDate = DateTime.Parse(components[4]);
             var gender = (Gender)(Enum.Parse(typeof(Gender), components[2]));
 
