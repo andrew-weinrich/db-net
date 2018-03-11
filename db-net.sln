@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadRecords", "ReadRecords\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordAPI", "RecordAPI\RecordAPI.csproj", "{3BF946F6-9B57-4889-A10B-89658CE72701}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Record_Tests", "Record_Tests\Record_Tests.csproj", "{417DBB5E-8304-4CC2-BDC1-67306EF41307}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{3BF946F6-9B57-4889-A10B-89658CE72701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BF946F6-9B57-4889-A10B-89658CE72701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BF946F6-9B57-4889-A10B-89658CE72701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{417DBB5E-8304-4CC2-BDC1-67306EF41307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{417DBB5E-8304-4CC2-BDC1-67306EF41307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{417DBB5E-8304-4CC2-BDC1-67306EF41307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{417DBB5E-8304-4CC2-BDC1-67306EF41307}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
